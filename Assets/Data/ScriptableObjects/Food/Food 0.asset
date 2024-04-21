@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Ingredients>k__BackingField:
   - <Ingredient>k__BackingField: 0
-    <Amount>k__BackingField: 1
-  <PrepTime>k__BackingField: 2
-  <HungerRegen>k__BackingField: 50
-  <HealthRegen>k__BackingField: 30
-  <VitalityRegen>k__BackingField: 20
+    <Amount>k__BackingField: 2
+  - <Ingredient>k__BackingField: 2
+    <Amount>k__BackingField: 4
+  <PrepTime>k__BackingField: 0
+  <HungerRegen>k__BackingField: 80
+  <HealthRegen>k__BackingField: 0
+  <VitalityRegen>k__BackingField: 0

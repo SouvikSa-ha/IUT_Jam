@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ingredient
+  - CookingArea
+  - Zone
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -15,10 +18,10 @@ TagManager:
   - 
   - Player
   - Obstruction
-  - 
-  - 
-  - 
-  - 
+  - Enemy
+  - Zone
+  - Ingredient
+  - CookingArea
   - 
   - 
   - 
@@ -44,6 +47,9 @@ TagManager:
     locked: 0
   - name: Background
     uniqueID: 2045863565
+    locked: 0
+  - name: Player
+    uniqueID: 2488693847
     locked: 0
   - name: Foreground
     uniqueID: 592449757

@@ -3,21 +3,6 @@ using UnityEngine;
 
 public class EnemyBehavior : MonoBehaviour
 {
-  #region old
-  private Vector2 spawnPoint;
-  private readonly float chaseDistance = 6f;
-  private readonly float chaseSpeed = 6f;
-  private readonly float roamSpeed = 4f;
-  private Vector2 roamEdge = new Vector2(3f, 0f);
-  private bool movingLeft = true;
-  private bool chasing = false;
-
-  private float attackMaxTime = 1.5f;
-  private float attackTimer = 1.5f;
-  private bool hit = false;
-  #endregion old
-
-
   [SerializeField] private EnemyData enemyData;
   private Rigidbody2D rb;
   private Vector2 targetDirection;
@@ -26,22 +11,25 @@ public class EnemyBehavior : MonoBehaviour
   [SerializeField] private Transform rendererGO;
   private float changeDirectionCoolDown = 2f;
   private bool resting = false;
+  [SerializeField] private Transform area;
+  private bool ignorePlayer = false;
+  private float attackTimer;
   private void Awake()
   {
     rb = GetComponent<Rigidbody2D>();
     fov = GetComponent<FieldOfView>();
-    spawnPoint = transform.position;
-    targetDirection = Vector2.up;
   }
   void Start()
   {
     player = PlayerStat.Instance.transform;
+    targetDirection = Vector2.up;
   }
 
   void Update()
   {
     UpdateTargetDirection();
     FlipSprite();
+    AttackPlayer();
   }
 
   private void FixedUpdate()
@@ -50,7 +38,16 @@ public class EnemyBehavior : MonoBehaviour
     SetVelocity();
   }
 
-
+  private void AttackPlayer(){
+    if(Vector2.Distance(transform.position, player.position) < enemyData.AttackRange && fov.canSeePlayer){
+      attackTimer += Time.deltaTime;
+      if(attackTimer >= enemyData.AttackSpeed){
+        PlayerStat.Instance.TakeDamage(enemyData.Damage);
+        attackTimer = 0f;
+      }
+    } 
+    else attackTimer = enemyData.AttackSpeed;
+  }
 
   private void UpdateTargetDirection()
   {
@@ -79,7 +76,7 @@ public class EnemyBehavior : MonoBehaviour
 
   private void HandlePlayerTargetting()
   {
-    if (fov.canSeePlayer) targetDirection = (player.position - transform.position).normalized;
+    if (fov.canSeePlayer && !ignorePlayer) targetDirection = (player.position - transform.position).normalized;
   }
 
   private void FlipSprite(){
@@ -98,71 +95,24 @@ public class EnemyBehavior : MonoBehaviour
 
   private void SetVelocity()
   {
-    if ((Vector2.Distance(transform.position, player.position) <= enemyData.AttackRange || resting) && !fov.canSeePlayer)
+    if ((Vector2.Distance(transform.position, player.position) <= enemyData.AttackRange && fov.canSeePlayer) || resting && !fov.canSeePlayer)
       rb.velocity = Vector2.zero;
     else 
       rb.velocity = targetDirection * enemyData.MoveSpeed;
   }
 
-  private void OldSystem()
-  {
-    if (hit)
-    {
-      if (attackTimer > attackMaxTime)
-      {
-        PlayerStat.Instance.TakeDamage(20);
-        attackTimer = 0f;
-      }
-      attackTimer += Time.deltaTime;
-      return;
-    }
-    else if (attackTimer < attackMaxTime)
-    {
-      attackTimer += Time.deltaTime;
-    }
-    if (Vector2.Distance(player.position, transform.position) < chaseDistance)
-    {
-      transform.position = Vector2.MoveTowards(transform.position, player.position, chaseSpeed * Time.deltaTime);
-      movingLeft = (transform.position.x - player.position.x) > 0;
-      chasing = true;
-    }
-    else if (Vector2.Distance(transform.position, spawnPoint) > 0.1f && chasing)
-    {
-      transform.position = Vector2.MoveTowards(transform.position, spawnPoint, roamSpeed * Time.deltaTime);
-      movingLeft = (transform.position.x - spawnPoint.x) > 0;
-    }
-    else
-    {
-      chasing = false;
-      if (Vector2.Distance(transform.position, spawnPoint + roamEdge) > 0.1f && !movingLeft)
-      {
-        transform.position = Vector2.MoveTowards(transform.position, spawnPoint + roamEdge, roamSpeed * Time.deltaTime);
-      }
-      else if (!movingLeft)
-      {
-        movingLeft = true;
-      }
-      if (Vector2.Distance(transform.position, spawnPoint - roamEdge) > 0.1f && movingLeft)
-      {
-        transform.position = Vector2.MoveTowards(transform.position, spawnPoint - roamEdge, roamSpeed * Time.deltaTime);
-      }
-      else if (movingLeft)
-      {
-        movingLeft = false;
-      }
-    }
-    if (movingLeft) transform.localScale = new Vector2(1, 1);
-    else transform.localScale = new Vector2(-1, 1);
-  }
-
   private void OnTriggerEnter2D(Collider2D other)
   {
-    if (other.CompareTag("Player")) hit = true;
-
+    if(other.CompareTag("Zone")) {
+      ignorePlayer = false;
+    }
   }
 
   private void OnTriggerExit2D(Collider2D other)
   {
-    if (other.CompareTag("Player")) hit = false;
+    if(other.CompareTag("Zone")) {
+      targetDirection = (area.position - transform.position).normalized;
+      ignorePlayer = true;
+    }
   }
 }

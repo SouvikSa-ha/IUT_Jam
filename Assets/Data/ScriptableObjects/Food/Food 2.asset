@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92219b33e9e215f4ab812bfb7319d6c0, type: 3}
+  m_Name: Food 2
+  m_EditorClassIdentifier: 
+  <Ingredients>k__BackingField:
+  - <Ingredient>k__BackingField: 2
+    <Amount>k__BackingField: 3
+  - <Ingredient>k__BackingField: 3
+    <Amount>k__BackingField: 3
+  <PrepTime>k__BackingField: 0
+  <HungerRegen>k__BackingField: 40
+  <HealthRegen>k__BackingField: 0
+  <VitalityRegen>k__BackingField: 0

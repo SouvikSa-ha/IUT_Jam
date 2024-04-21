@@ -25,14 +25,7 @@ public class PlayerMovement : MonoBehaviour
     var vertical = Input.GetAxisRaw("Vertical");
     moveDirection = new Vector2(horizontal, vertical).normalized;
   }
-
-  private void OnTriggerEnter2D(Collider2D other) {
-    if(other.CompareTag("Ingredient")){
-      Debug.Log("Found " + other.GetComponent<IngredientHolder>().ingredient);
-      Destroy(other.gameObject);
-    }
-  }
-
+  
   private void Move(){
     rb.velocity = moveSpeed * moveDirection;
   }
