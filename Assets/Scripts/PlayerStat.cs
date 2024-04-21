@@ -92,4 +92,8 @@ public class PlayerStat : MonoBehaviour
     hungerSlider.value = currentHunger;
     StartCoroutine(UpdateHungerMeter());
   }
+
+  IEnumerator PlayerInvinsibility(){
+    yield return null; 
+  }
 }
