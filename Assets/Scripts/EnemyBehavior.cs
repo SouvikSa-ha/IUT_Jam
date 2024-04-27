@@ -22,11 +22,14 @@ public class EnemyBehavior : MonoBehaviour
   private readonly EnemyAliveState aliveState = new();
   private readonly EnemyDeadState deadState = new();
   public SpellIngredient spellIngredient;
+  private AudioSource source;
+  [SerializeField] private AudioClip clip;
 
   private void Awake()
   {
     rb = GetComponent<Rigidbody2D>();
     fov = GetComponent<FieldOfView>();
+    source = GetComponent<AudioSource>();
   }
   void Start()
   {
@@ -85,7 +88,15 @@ public class EnemyBehavior : MonoBehaviour
 
   private void HandlePlayerTargetting()
   {
-    if (fov.canSeePlayer && !ignorePlayer) targetDirection = (player.position - transform.position).normalized;
+    if (fov.canSeePlayer && !ignorePlayer) {
+      targetDirection = (player.position - transform.position).normalized;
+      Growl();
+    }
+    else hasAudioPlayed = false;
+  }
+  private bool hasAudioPlayed = false;
+  private void Growl(){ 
+    if(!hasAudioPlayed){ source.PlayOneShot(clip); hasAudioPlayed = true; }
   }
 
   [HideInInspector] public void FlipSprite(){

@@ -58,10 +58,12 @@ public class Inventory : MonoBehaviour
   [SerializeField] private TextMeshProUGUI[] ingredientTexts;
   [SerializeField] private TextMeshProUGUI[] spellIngredientTexts;
   private readonly int foodPoisoningValue = 13;
+  private AudioSource source;
+  [SerializeField] private AudioClip collect;
   private void Start() {
     items = wrapper.ToDictionary();
     spellItems = spellWrapper.ToDictionary();
-      
+    source = GetComponent<AudioSource>();
     UpdateInventorySpellItemsHUD(ingredient: SpellIngredient.EnemyA);
     UpdateInventorySpellItemsHUD(ingredient: SpellIngredient.EnemyB);
     UpdateInventorySpellItemsHUD(ingredient: SpellIngredient.EnemyC);
@@ -115,11 +117,17 @@ public class Inventory : MonoBehaviour
   private void OnTriggerEnter2D(Collider2D other) {
     if(other.CompareTag("Ingredient")){
       var added = AddFoodIngredient(other.GetComponent<IngredientHolder>().ingredient);
-      if(added) Destroy(other.gameObject);
+      if(added) {
+        Destroy(other.gameObject);
+        source.PlayOneShot(collect);
+      }
     }
     else if(other.CompareTag("SpellIngredient")){
       var added = AddSpellIngredient(other.GetComponent<EnemyBehavior>().spellIngredient);
-      if(added) Destroy(other.gameObject);
+      if(added) {
+        Destroy(other.gameObject);
+        source.PlayOneShot(collect);
+      }
     }
   }
 }

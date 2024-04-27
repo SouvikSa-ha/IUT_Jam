@@ -87279,26 +87279,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1820835300}
     - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
-      propertyPath: selectedColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
-      propertyPath: selectedColor.b
-      value: 0.5641509
-      objectReference: {fileID: 0}
-    - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
-      propertyPath: selectedColor.g
-      value: 0.5641509
-      objectReference: {fileID: 0}
-    - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
-      propertyPath: selectedColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
-      propertyPath: foods.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
       propertyPath: gameOverTimerTxt
       value: 
       objectReference: {fileID: 508644942}
@@ -87311,18 +87291,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2044967446}
     - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
-      propertyPath: deselectedColor.b
-      value: 0.7075472
-      objectReference: {fileID: 0}
-    - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
-      propertyPath: deselectedColor.g
-      value: 0.7075472
-      objectReference: {fileID: 0}
-    - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
-      propertyPath: deselectedColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
       propertyPath: inventorySpellBtn
       value: 
       objectReference: {fileID: 2094622934}
@@ -87330,30 +87298,6 @@ PrefabInstance:
       propertyPath: inventorySpellPan
       value: 
       objectReference: {fileID: 1343571702}
-    - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
-      propertyPath: spells.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
-      propertyPath: foodBtns.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
-      propertyPath: spellBtns.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
-      propertyPath: spells.Array.data[0]
-      value: 
-      objectReference: {fileID: 11400000, guid: d1d4d09a3f24cd64fb6a4897f2b41052, type: 2}
-    - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
-      propertyPath: spells.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: 51e5638b61fe8374c8b46236330eaca0, type: 2}
-    - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
-      propertyPath: spells.Array.data[2]
-      value: 
-      objectReference: {fileID: 11400000, guid: 8528e84086471264f87deb5d39af8653, type: 2}
     - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
       propertyPath: foodBtns.Array.data[0]
       value: 
@@ -87366,10 +87310,6 @@ PrefabInstance:
       propertyPath: foodBtns.Array.data[2]
       value: 
       objectReference: {fileID: 1827844764}
-    - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
-      propertyPath: foodBtns.Array.data[3]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 3083505398403643585, guid: cec127fecabd7ee46874d148defb6e97, type: 3}
       propertyPath: spellBtns.Array.data[0]
       value: 

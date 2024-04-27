@@ -41,7 +41,8 @@ public class GameManager : MonoBehaviour
   private float timer = 0f;
   [SerializeField] private TextMeshProUGUI gameOverTimerTxt;
   [HideInInspector] public bool inCookingArea = false;
-
+  private AudioSource source;
+  [SerializeField] private AudioClip clickSound;
   private Inventory inventory;
   private PlayerStat playerStat;
   private void Start()
@@ -58,6 +59,7 @@ public class GameManager : MonoBehaviour
       btn.interactable = false;
     foreach (var btn in spellBtns)
       btn.interactable = false;
+    source = GetComponent<AudioSource>();
     Time.timeScale = 0;
   }
 
@@ -156,6 +158,7 @@ public class GameManager : MonoBehaviour
 
   public void Cook(int i)
   {
+    source.PlayOneShot(clickSound);
     foreach (var ingredient in foods[i].Ingredients)
     {
       inventory.UseFoodIngredient(ingredient.Ingredient, ingredient.Amount);
@@ -167,6 +170,8 @@ public class GameManager : MonoBehaviour
 
   public void PrepareSpell(int i)
   {
+    source.PlayOneShot(clickSound);
+
     foreach (var ingredient in spells[i].Ingredients)
     {
       inventory.UseSpellIngredient(ingredient.Ingredient, ingredient.Amount);
