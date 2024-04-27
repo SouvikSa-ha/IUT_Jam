@@ -9,19 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92219b33e9e215f4ab812bfb7319d6c0, type: 3}
-  m_Name: Food 3
+  m_Script: {fileID: 11500000, guid: 9240cfb85d42f2f4daa5bfdacc8ffd97, type: 3}
+  m_Name: Spell 2
   m_EditorClassIdentifier: 
   <Ingredients>k__BackingField:
-  - <Ingredient>k__BackingField: 0
+  - <Ingredient>k__BackingField: 2
     <Amount>k__BackingField: 2
-  - <Ingredient>k__BackingField: 2
-    <Amount>k__BackingField: 1
-  - <Ingredient>k__BackingField: 2
-    <Amount>k__BackingField: 3
   - <Ingredient>k__BackingField: 3
     <Amount>k__BackingField: 1
   <PrepTime>k__BackingField: 0
-  <HungerRegen>k__BackingField: 60
-  <HealthRegen>k__BackingField: 20
-  <VitalityRegen>k__BackingField: 20
+  <SpellEffect>k__BackingField: 2

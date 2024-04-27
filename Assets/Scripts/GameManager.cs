@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,8 +23,23 @@ public class GameManager : MonoBehaviour
   [SerializeField] private GameObject GameOverMenu;
   [SerializeField] private GameObject PlayerHUD;
   [SerializeField] private Button[] foodBtns;
-  [SerializeField] private FoodData[] foods;
+  [SerializeField] private Button[] spellBtns;
 
+  [SerializeField] private FoodData[] foods;
+  [SerializeField] private SpellData[] spells;
+  [SerializeField] private GameObject inventoryFoodPan;
+  [SerializeField] private GameObject inventorySpellPan;
+  [SerializeField] private GameObject cookingFoodPan;
+  [SerializeField] private GameObject cookingSpellPan;
+  [SerializeField] private Image inventoryFoodBtn;
+  [SerializeField] private Image inventorySpellBtn;
+  [SerializeField] private Image cookingFoodBtn;
+  [SerializeField] private Image cookingSpellBtn;
+  [SerializeField] private Color selectedColor;
+  [SerializeField] private Color deselectedColor;
+  [SerializeField] private TextMeshProUGUI timerTxt;
+  private float timer = 0f;
+  [SerializeField] private TextMeshProUGUI gameOverTimerTxt;
   [HideInInspector] public bool inCookingArea = false;
 
   private Inventory inventory;
@@ -40,6 +56,8 @@ public class GameManager : MonoBehaviour
     playerStat = PlayerStat.Instance;
     foreach (var btn in foodBtns)
       btn.interactable = false;
+    foreach (var btn in spellBtns)
+      btn.interactable = false;
     Time.timeScale = 0;
   }
 
@@ -51,7 +69,18 @@ public class GameManager : MonoBehaviour
     pauseMenu.SetActive(false);
     GameOverMenu.SetActive(false);
     PlayerHUD.SetActive(true);
+
+    inventoryFoodPan.SetActive(true);
+    inventoryFoodBtn.color = selectedColor;
+    cookingFoodPan.SetActive(true);
+    cookingFoodBtn.color = selectedColor;
+    inventorySpellPan.SetActive(false);
+    inventorySpellBtn.color = deselectedColor;
+    cookingSpellPan.SetActive(false);
+    cookingSpellBtn.color = deselectedColor;
     Time.timeScale = 1;
+    UpdateSpellButtonsInteractability();
+    UpdateButtonsInteractability();
   }
 
   public void MainMenu()
@@ -74,12 +103,17 @@ public class GameManager : MonoBehaviour
       pauseMenu.SetActive(!pauseMenu.activeSelf);
       Time.timeScale = pauseMenu.activeSelf ? 0 : 1;
     }
+    timer += Time.deltaTime;
+    float hours = Mathf.Floor(timer / 3600);
+    float minutes = Mathf.FloorToInt(timer % 3600 /60); 
+    float seconds = Mathf.FloorToInt(timer % 60);
+    timerTxt.text = string.Format("{0:00}:{1:00}:{2:00}", hours, minutes, seconds);
   }
 
   [HideInInspector]
   public void DeactivateCookingCV()
   {
-    cookingCV.SetActive(inCookingArea = false);
+    if (cookingCV != null) cookingCV.SetActive(inCookingArea = false);
   }
 
   [HideInInspector]
@@ -101,22 +135,45 @@ public class GameManager : MonoBehaviour
     }
   }
 
+  [HideInInspector]
+  public void UpdateSpellButtonsInteractability()
+  {
+    for (int i = 0; i < spellBtns.Length; i++)
+    {
+      var flag = 0;
+      foreach (var ingredient in spells[i].Ingredients)
+      {
+        if (inventory.spellItems[ingredient.Ingredient] < ingredient.Amount)
+        {
+          flag = 1;
+          spellBtns[i].interactable = false;
+          break;
+        }
+      }
+      if (flag == 0) spellBtns[i].interactable = true;
+    }
+  }
+
   public void Cook(int i)
   {
     foreach (var ingredient in foods[i].Ingredients)
     {
-      inventory.UseIngredient(ingredient.Ingredient, ingredient.Amount);
+      inventory.UseFoodIngredient(ingredient.Ingredient, ingredient.Amount);
     }
     playerStat.currentHealth = Mathf.Clamp(playerStat.currentHealth += foods[i].HealthRegen, 0, playerStat.Health);
     playerStat.currentHunger = Mathf.Clamp(playerStat.currentHunger += foods[i].HungerRegen, 0, playerStat.Hunger);
-    playerStat.currentVitality = Mathf.Clamp(playerStat.currentVitality += foods[i].VitalityRegen, 0, playerStat.Vitality);
-    if (i == 2)
-    {
-      playerStat.vitalityOnBoost = true;
-      playerStat.currentVitality = playerStat.Vitality;
-      StartCoroutine(playerStat.EnableVitalityBoost());
-    }
     playerStat.UpdateAllHUD();
+  }
+
+  public void PrepareSpell(int i)
+  {
+    foreach (var ingredient in spells[i].Ingredients)
+    {
+      inventory.UseSpellIngredient(ingredient.Ingredient, ingredient.Amount);
+    }
+    if(spells[i].SpellEffect == SpellEffect.VitalityImmunity) StartCoroutine(SpellEffects.Instance.EnableVitalityBoost());
+    else if(spells[i].SpellEffect == SpellEffect.HungerImmunity) SpellEffects.Instance.EnableHungerBoost();
+    else if(spells[i].SpellEffect == SpellEffect.ToxicImmunity) SpellEffects.Instance.EnableToxicImmunity();
   }
 
   [HideInInspector]
@@ -129,5 +186,35 @@ public class GameManager : MonoBehaviour
     mainMenu.SetActive(false);
     GameOverMenu.SetActive(true);
     PlayerHUD.SetActive(false);
+    gameOverTimerTxt.text = "You survived " + timerTxt.text;
+  }
+
+  public void SetInventoryFoodPan(){
+    inventoryFoodPan.SetActive(true);
+    inventoryFoodBtn.color = selectedColor;
+    inventorySpellPan.SetActive(false);
+    inventorySpellBtn.color = deselectedColor;
+  }
+  public void SetInventorySpellPan(){
+    inventoryFoodPan.SetActive(false);
+    inventoryFoodBtn.color = deselectedColor;
+    inventorySpellPan.SetActive(true);
+    inventorySpellBtn.color = selectedColor;
+  }
+  public void SetCookingFoodPan(){
+    cookingFoodPan.SetActive(true);
+    cookingFoodBtn.color = selectedColor;
+    cookingSpellPan.SetActive(false);
+    cookingSpellBtn.color = deselectedColor;
+  }
+  public void SetCookingSpellPan(){
+    cookingFoodPan.SetActive(false);
+    cookingFoodBtn.color = deselectedColor;
+    cookingSpellPan.SetActive(true);
+    cookingSpellBtn.color = selectedColor;
+  }
+
+  public void DisableHungerBackfire(){
+    SpellEffects.Instance.DisableHungerBackfire();
   }
 }

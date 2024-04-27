@@ -15,7 +15,7 @@ MonoBehaviour:
   <MoveSpeed>k__BackingField: 5
   <Damage>k__BackingField: 5
   <AttackSpeed>k__BackingField: 1
-  <AttackRange>k__BackingField: 1.2
+  <AttackRange>k__BackingField: 1
   <PlayerAwarenessRadius>k__BackingField: 3
   <FovAngle>k__BackingField: 30
   <RotationSpeed>k__BackingField: 100

@@ -20,5 +20,4 @@ public class FoodData : ScriptableObject {
   [field: SerializeField] public int PrepTime { get; private set; }
   [field: SerializeField] public int HungerRegen { get; private set; }
   [field: SerializeField] public int HealthRegen { get; private set; }
-  [field: SerializeField] public int VitalityRegen { get; private set; }
 }

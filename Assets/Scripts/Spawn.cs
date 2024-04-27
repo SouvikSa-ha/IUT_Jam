@@ -10,14 +10,20 @@ public class Spawn : MonoBehaviour
   {
     areaDimensions = GetComponent<BoxCollider2D>().size / 2;
     areaDimensions = new Vector2(areaDimensions.x - 0.5f, areaDimensions.y - 0.5f);
-    SpawnEnemy();
+    StartCoroutine(SpawnEnemy());
     StartCoroutine(SpawnIngredient());
   }
 
-  private void SpawnEnemy()
+  private IEnumerator SpawnEnemy()
   {
     for(int i=0; i<5; i++){
       Vector2 pos = (Vector2)transform.position + new Vector2(Random.Range(-areaDimensions.x, areaDimensions.x), Random.Range(-areaDimensions.y, areaDimensions.y));
+      Instantiate(Enemy, pos, Quaternion.identity);
+    }
+    WaitForSeconds wait = new(7);
+    while(true){
+      Vector2 pos = (Vector2)transform.position + new Vector2(Random.Range(-areaDimensions.x, areaDimensions.x), Random.Range(-areaDimensions.y, areaDimensions.y));
+      yield return wait;
       Instantiate(Enemy, pos, Quaternion.identity);
     }
   }

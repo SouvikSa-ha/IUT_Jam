@@ -4,7 +4,7 @@ using UnityEngine;
 public class EnemyBehavior : MonoBehaviour
 {
   [SerializeField] private EnemyData enemyData;
-  private Rigidbody2D rb;
+  [HideInInspector] public Rigidbody2D rb;
   private Vector2 targetDirection;
   private Transform player;
   private FieldOfView fov;
@@ -14,6 +14,15 @@ public class EnemyBehavior : MonoBehaviour
   [SerializeField] private Transform area;
   private bool ignorePlayer = false;
   private float attackTimer;
+
+  private float lifeSpan;
+  public GameObject directionIndicator;
+
+  private EnemyBasicState currentState;
+  private readonly EnemyAliveState aliveState = new();
+  private readonly EnemyDeadState deadState = new();
+  public SpellIngredient spellIngredient;
+
   private void Awake()
   {
     rb = GetComponent<Rigidbody2D>();
@@ -23,22 +32,22 @@ public class EnemyBehavior : MonoBehaviour
   {
     player = PlayerStat.Instance.transform;
     targetDirection = Vector2.up;
+    currentState = aliveState;
+    lifeSpan = Random.Range(30, 40);
+    StartCoroutine(LifeSpan());
   }
 
   void Update()
   {
-    UpdateTargetDirection();
-    FlipSprite();
-    AttackPlayer();
+    currentState.UpdateState(this);
   }
 
   private void FixedUpdate()
   {
-    RotateToDirection();
-    SetVelocity();
+    currentState.FixedUpdate(this);
   }
 
-  private void AttackPlayer(){
+  [HideInInspector] public void AttackPlayer(){
     if(Vector2.Distance(transform.position, player.position) < enemyData.AttackRange && fov.canSeePlayer){
       attackTimer += Time.deltaTime;
       if(attackTimer >= enemyData.AttackSpeed){
@@ -49,7 +58,7 @@ public class EnemyBehavior : MonoBehaviour
     else attackTimer = enemyData.AttackSpeed;
   }
 
-  private void UpdateTargetDirection()
+  [HideInInspector] public void UpdateTargetDirection()
   {
     HandleRandomDirection();
     HandlePlayerTargetting();
@@ -79,12 +88,12 @@ public class EnemyBehavior : MonoBehaviour
     if (fov.canSeePlayer && !ignorePlayer) targetDirection = (player.position - transform.position).normalized;
   }
 
-  private void FlipSprite(){
+  [HideInInspector] public void FlipSprite(){
     if(transform.rotation.z > 0 && transform.rotation.z < 180) rendererGO.localScale = new Vector3(-1, 1, 1);
     else rendererGO.localScale = Vector3.one;
   }
 
-  private void RotateToDirection()
+  [HideInInspector] public void RotateToDirection()
   {
     Quaternion targetRotation = Quaternion.LookRotation(transform.forward, targetDirection);
     Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, enemyData.RotationSpeed * Time.deltaTime);
@@ -93,7 +102,7 @@ public class EnemyBehavior : MonoBehaviour
     rendererGO.rotation = Quaternion.Euler(0f, 0f, -rotation.z);
   }
 
-  private void SetVelocity()
+  [HideInInspector] public void SetVelocity()
   {
     if ((Vector2.Distance(transform.position, player.position) <= enemyData.AttackRange && fov.canSeePlayer) || resting && !fov.canSeePlayer)
       rb.velocity = Vector2.zero;
@@ -104,7 +113,7 @@ public class EnemyBehavior : MonoBehaviour
   private void OnTriggerEnter2D(Collider2D other)
   {
     if(other.CompareTag("Zone")) {
-      ignorePlayer = false;
+      StartCoroutine(MakeAwareOfPlayer());
     }
   }
 
@@ -114,5 +123,16 @@ public class EnemyBehavior : MonoBehaviour
       targetDirection = (area.position - transform.position).normalized;
       ignorePlayer = true;
     }
+  }
+
+  private IEnumerator MakeAwareOfPlayer(){
+    yield return new WaitForSeconds(.5f);
+    ignorePlayer = false;
+  }
+
+  private IEnumerator LifeSpan(){
+    yield return new WaitForSeconds(lifeSpan);
+    currentState = deadState;
+    currentState.EnterState(this);
   }
 }

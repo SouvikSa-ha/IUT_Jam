@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5729686005645523721}
   - component: {fileID: 8205174868632393836}
   - component: {fileID: 2657214535972682348}
+  - component: {fileID: 6398702113121862329}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1806273449
+  m_SortingLayerID: 592449757
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ba09b3a359481964bb29b3dbc3be7fbf, type: 3}
@@ -144,10 +145,12 @@ MonoBehaviour:
   currentHealth: 40
   currentHunger: 0
   currentVitality: 0
-  hungerMeterReductionTime: 1
-  vitalityReductionTime: 1
-  vitalityRegenTime: 1.5
+  hungerMeterReductionTime: 1.5
+  vitalityReductionTime: 0.8
+  vitalityRegenTime: 0.9
   vitalityOnBoost: 0
+  vitalityonBackfire: 0
+  hungerOnBoost: 0
   healthSlider: {fileID: 0}
   hungerSlider: {fileID: 0}
   vitalitySlider: {fileID: 0}
@@ -183,9 +186,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.2212443}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.2787557
 --- !u!114 &2657214535972682348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,7 +211,46 @@ MonoBehaviour:
       <Amount>k__BackingField: 0
     - <Ingredient>k__BackingField: 3
       <Amount>k__BackingField: 0
-  ingredientAText: {fileID: 0}
-  ingredientBText: {fileID: 0}
-  ingredientCText: {fileID: 0}
-  ingredientDText: {fileID: 0}
+  spellWrapper:
+    items:
+    - <Ingredient>k__BackingField: 0
+      <Amount>k__BackingField: 0
+    - <Ingredient>k__BackingField: 1
+      <Amount>k__BackingField: 0
+    - <Ingredient>k__BackingField: 2
+      <Amount>k__BackingField: 0
+    - <Ingredient>k__BackingField: 3
+      <Amount>k__BackingField: 0
+  ingredientTexts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  spellIngredientTexts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &6398702113121862329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3732836720563102266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05846116785c51b48835195b47f964bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthSlider: {fileID: 0}
+  hungerSlider: {fileID: 0}
+  vitalitySlider: {fileID: 0}
+  vitalityColor: {r: 0.26666668, g: 0.8666667, b: 1, a: 1}
+  vitalityBoostedColor: {r: 0.26666668, g: 0.53333336, b: 1, a: 1}
+  vitalityBackfireColor: {r: 0.7584905, g: 0.19892481, b: 0.747768, a: 1}
+  hungerColor: {r: 1, g: 0.6156863, b: 0.6156863, a: 1}
+  hungerBoostedColor: {r: 1, g: 0.390566, b: 0.390566, a: 1}
+  hungerBackFireColor: {r: 0.78039217, g: 0.1882353, b: 0.12941177, a: 1}
+  healthColor: {r: 0.33333334, g: 1, b: 0.6, a: 1}
+  foodPoisoningColor: {r: 0.78039217, g: 0.5715098, b: 0.12941174, a: 1}

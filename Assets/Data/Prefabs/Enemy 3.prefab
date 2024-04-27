@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 592449757
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 3612a8a9904c5e348bfb002f7d05e929, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -155,7 +155,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 592449757
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: cbaf4fbc3bac1dd4c9ff091dcdd2872e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -280,8 +280,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: 5d7a6dd751d6ff949b167829a54a7819, type: 2}
+  rb: {fileID: 0}
   rendererGO: {fileID: 2681618890178307558}
   area: {fileID: 9199665443710732141, guid: c6a2f876ccc447d41abfca61a579f047, type: 3}
+  directionIndicator: {fileID: 112679030559953400}
+  spellIngredient: 2
 --- !u!114 &2989555031156318378
 MonoBehaviour:
   m_ObjectHideFlags: 0

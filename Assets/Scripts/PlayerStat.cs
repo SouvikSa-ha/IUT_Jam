@@ -12,19 +12,19 @@ public class PlayerStat : MonoBehaviour
   }
   #endregion
 
-  public readonly int Health = 100, Hunger = 100, Vitality = 100;
+  public readonly int Health = 100, Hunger = 100, Vitality = 60;
   public int currentHealth, currentHunger, currentVitality;
-  public float hungerMeterReductionTime = 1f;
-  public float vitalityReductionTime = 1f;
-  public float vitalityRegenTime = 1.5f;
+  public float hungerMeterReductionTime = 1.5f;
+  public float vitalityReductionTime = 0.7f;
+  public float vitalityRegenTime = 0.8f;
   private float vRedCurrentTime, vRegCurrentTime;
-  public bool vitalityOnBoost;
-  private float vitalityBoostTimer = 20f;
-  private Color vitalityColor, vitalityBoostedColor;
+  public bool vitalityOnBoost = false;
+  public bool vitalityonBackfire = false;
+  public bool hungerOnBoost = false;
 
   [SerializeField] private Slider healthSlider, hungerSlider, vitalitySlider;
   private Rigidbody2D rb;
-
+  private SpriteRenderer sprenderer;
   void Start()
   {
     currentHealth = Health;
@@ -32,13 +32,10 @@ public class PlayerStat : MonoBehaviour
     currentVitality = Vitality;
     vRedCurrentTime = vitalityReductionTime;
     vRegCurrentTime = vitalityRegenTime;
-    healthSlider.value = Health;
-    hungerSlider.value = Hunger;
-    vitalitySlider.value = Vitality;
+    UpdateAllHUD();
     rb = GetComponent<Rigidbody2D>();
+    sprenderer = GetComponent<SpriteRenderer>();
     StartCoroutine(UpdateHungerMeter());
-    ColorUtility.TryParseHtmlString( "#44DDFF" , out vitalityColor );
-    ColorUtility.TryParseHtmlString( "#4488FF" , out vitalityBoostedColor );
   }
   private void Update()
   {
@@ -60,9 +57,9 @@ public class PlayerStat : MonoBehaviour
         vRedCurrentTime = vitalityReductionTime;
       }
     }
-    else
+    else if(rb.velocity.magnitude == 0 && !vitalityonBackfire )
     {
-      if (currentVitality < 100)
+      if (currentVitality < Vitality)
       {
         vRegCurrentTime -= Time.deltaTime;
         vRedCurrentTime = vitalityReductionTime;
@@ -76,7 +73,8 @@ public class PlayerStat : MonoBehaviour
     }
   }
 
-  private void Die(){
+  [HideInInspector]
+  public void Die(){
     GameManager.Instance.EndGame();
   }
 
@@ -87,15 +85,36 @@ public class PlayerStat : MonoBehaviour
     if(currentHealth <= 0){
       Die();
     }
+    else{
+      StartCoroutine(SpriteFlash());
+    } 
     healthSlider.value = currentHealth;
+  }
+
+  private IEnumerator SpriteFlash(){
+    float elapsedTime = 0;
+    float elapsedPercentage;
+    float numberOfFlashes = 2;
+    while(elapsedTime < 1f){
+      elapsedTime += Time.deltaTime;
+      elapsedPercentage = elapsedTime / 1f;
+      if(elapsedPercentage > 1){
+        elapsedPercentage = 1;
+      }
+      float pingPongPercentage = Mathf.PingPong(elapsedPercentage * 2 * numberOfFlashes, 1);
+      sprenderer.color = Color.Lerp(Color.white, Color.red, pingPongPercentage);
+      yield return null;
+    }
   }
 
   IEnumerator UpdateHungerMeter()
   {
     yield return new WaitForSeconds(hungerMeterReductionTime);
-    currentHunger--;
-    if(currentHunger <= 0) Die();
-    hungerSlider.value = currentHunger;
+    if(!hungerOnBoost) {
+      currentHunger--;
+      if(currentHunger <= 0) Die();
+      hungerSlider.value = currentHunger;
+    }
     StartCoroutine(UpdateHungerMeter());
   }
 
@@ -104,13 +123,6 @@ public class PlayerStat : MonoBehaviour
     healthSlider.value = currentHealth;
     hungerSlider.value = currentHunger;
     vitalitySlider.value = currentVitality;
-  }
-  [HideInInspector]
-  public IEnumerator EnableVitalityBoost(){
-    vitalitySlider.fillRect.GetComponent<Image>().color = vitalityBoostedColor;
-    yield return new WaitForSeconds(vitalityBoostTimer);
-    vitalitySlider.fillRect.GetComponent<Image>().color = vitalityColor;
-    vitalityOnBoost = false;
   }
 
   private void OnTriggerEnter2D(Collider2D other) {

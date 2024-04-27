@@ -15,9 +15,8 @@ MonoBehaviour:
   <Ingredients>k__BackingField:
   - <Ingredient>k__BackingField: 0
     <Amount>k__BackingField: 2
-  - <Ingredient>k__BackingField: 1
+  - <Ingredient>k__BackingField: 2
     <Amount>k__BackingField: 3
   <PrepTime>k__BackingField: 0
   <HungerRegen>k__BackingField: 60
   <HealthRegen>k__BackingField: 0
-  <VitalityRegen>k__BackingField: 0

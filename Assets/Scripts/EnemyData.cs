@@ -9,5 +9,4 @@ public class EnemyData : ScriptableObject {
   [field: SerializeField] public float PlayerAwarenessRadius { get; private set; }
   [field: SerializeField, Range(0, 360)] public float FovAngle { get; private set; }
   [field: SerializeField, Range(0, 360)] public float RotationSpeed { get; private set; }
-
 }
